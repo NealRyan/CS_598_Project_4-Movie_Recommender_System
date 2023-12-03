@@ -1,5 +1,7 @@
-from myfuns import (genres, get_displayed_movies, get_popular_movies,
-                    get_recommended_movies)
+#functions to implement
+
+#DONE: genres, get_displayed_movies, get_popular_movies,
+#TO DO: get_recommended_movies
 
 import os
 import pandas as pd
