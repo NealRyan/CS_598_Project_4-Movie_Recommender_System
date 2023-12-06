@@ -7,8 +7,7 @@ import pandas as pd
 from dash import Input, Output, dcc, html
 from dash.dependencies import ALL, State
 
-from myfuns import (genres, get_displayed_movies, get_popular_movies,
-                    get_recommended_movies)
+from myfuns import (genres, get_displayed_movies, get_popular_movies, get_recommended_movies)
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.BOOTSTRAP], 
                suppress_callback_exceptions=True)
