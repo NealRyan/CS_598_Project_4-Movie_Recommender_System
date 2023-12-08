@@ -16,9 +16,9 @@ This metric will be referred to as "score."
 
 ### User does not provide enough/any ratings to system 2 
 
--If 0 movies are rated: pad the list with the highest score movies (general, not from a particular genre) 
+- If 0 movies are rated: pad the list with the highest score movies (general, not from a particular genre) 
 
--If >0 but <10 movies are rated: use IBCF to recommend as many movies as possible, then pad this list with highest score movies 
+- If >0 but <10 movies are rated: use IBCF to recommend as many movies as possible, then pad this list with highest score movies 
 
 ### Movies provided by system 2 are low rated 
 
