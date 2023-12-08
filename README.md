@@ -2,7 +2,7 @@
 
 # How are general recommendations handled? (Non-IBCF)
 
-We will now create the function that returns the highest "scoring" movies. This will be the default return function.
+We will recommend movies with the highest score.
 
 To define what we mean by highest scoring:
 
