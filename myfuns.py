@@ -133,10 +133,7 @@ def get_recommended_movies(new_user_ratings):
     return movies.head(10)
 
 def get_popular_movies(genre: str):
-    global movies
-    global genres
     if genre in genres:
-        #genres = movies['genres'].unique()
         return top_movies_by_genre(genre, df=movies_with_ratings)
     else: 
         return movies[10:20]
