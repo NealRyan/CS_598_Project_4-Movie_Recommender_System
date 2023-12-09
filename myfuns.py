@@ -260,22 +260,21 @@ def get_recommended_movies(user_rating_input, n_req_recommendations=10, min_rati
         # Force NaNs to zero to help sort ratings.
         pred_ratings = np.full((pred_numerators.shape), fill_value=0.0, dtype="float64")
 
-        # Compute predicted ratings.
-        
+        # Get denominators of predicted ratings.
+
         # Similarity matrix for predictions is two-dimensional: normal case.
         if (S_for_pred.ndim > 1):
-            # Denominators of predicted ratings
             pred_denominators = np.sum(S_for_pred, axis=1)
-            # Indexes of nonzero denominators: movies with at least one similarity value to something the new user rated
-            nonzero_denom_index = np.argwhere(pred_denominators > 0.0)
-            # Generate predictions
-            pred_ratings[nonzero_denom_index] = pred_numerators[nonzero_denom_index] / pred_denominators[nonzero_denom_index]
-        # If only one similarity value, treat it as a scalar.
+        # Similarity matrix is one-dimensional due to single rating
         else:
-            pred_denominators = np.sum(S_for_pred)
-            if (pred_denominators > 0):
-                # Generate predictions
-                pred_ratings = pred_numerators / pred_denominators
+            pred_denominators = S_for_pred
+
+        # Compute predicted ratings.
+
+        # Indexes of nonzero denominators: movies with at least one similarity value to something the new user rated
+        nonzero_denom_index = np.argwhere(pred_denominators > 0.0)
+        # Generate predictions
+        pred_ratings[nonzero_denom_index] = pred_numerators[nonzero_denom_index] / pred_denominators[nonzero_denom_index]
 
         # Count the predictions that are equal to or greater than min_rating_recommended.
         n_recommended = np.sum(pred_ratings >= min_rating_recommended)
