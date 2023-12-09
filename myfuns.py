@@ -1,50 +1,29 @@
-#functions to implement
-#DONE: genres, get_displayed_movies, get_popular_movies,
-#TO DO: get_recommended_movies
+# myfuns.py
+# for Project 4, CS 598 Practical Statistical Learning, Fall 2023
+#
+# Core logic for movie recommendation app using the MovieLens dataset.
+#
+# Team Members:
+# * Neal Ryan (nealpr2): System I + padding logic for System II
+# * Kurt Tuohy (ktuohy): System II similarity matrix and core recommendation system
+# * Alelign Faris (faris2): Python Dash app
+#
+# To run app locally:
+#
+# 1) From command prompt, run:
+#    python Dash_Starter_Code.py
+#
+# 2) Point web browser to: http://127.0.0.1:8080/
+
 
 import pandas as pd
-#import requests
 import numpy as np
-
-#Expected movies column names:
-#movie_id, title, genres
-'''
-# Define the URL for movie data
-myurl = "https://liangfgithub.github.io/MovieData/movies.dat?raw=true"
-
-# Fetch the data from the URL
-response = requests.get(myurl)
-
-# Split the data into lines and then split each line using "::"
-movie_lines = response.text.split('\n')
-movie_data = [line.split("::") for line in movie_lines if line]
-
-# Create a DataFrame from the movie data
-movies = pd.DataFrame(movie_data, columns=['movie_id', 'title', 'genres'])
-movies['movie_id'] = movies['movie_id'].astype(int)
-
-genres = list(
-    sorted(set([genre for genres in movies.genres.unique() for genre in genres.split("|")]))
-)
-
-# Read movie/movie similarity matrix from Github. NEEDS FINALIZING.
-# Method copied from https://medium.com/towards-entrepreneurship/importing-a-csv-file-from-github-in-a-jupyter-notebook-e2c28e7e74a5
-similarity_url = "https://raw.githubusercontent.com/NealRyan/CS_598_Project_4-Movie_Recommender_System/Dash-Work/Data/movie_similarity_matrix.csv"
-similarity_download = requests.get(similarity_url).content
-similarity_df = pd.read_csv(io.StringIO(similarity_download.decode("utf-8")), index_col=0)
-similarity_matrix = similarity_df.to_numpy()
-char_movie_ids = similarity_df.columns
-
-# Read sparse matrix directly
-#similarity_url = "https://github.com/NealRyan/CS_598_Project_4-Movie_Recommender_System/raw/Dash-Work/Data/movie_similarity_matrix.npz"
-#similarity_download = requests.get(similarity_url).content
-#similarity_matrix = sparse.load_npz(similarity_download).toarray()
-
-'''
 
 ##########################
 # Movies with ratings DF #
 ##########################
+
+# Load list of movies in the MovieLens dataset
 
 movies_data_filename = "Data/movies.dat"
 ratings_data_filename = "Data/ratings.dat"
@@ -72,6 +51,9 @@ ratings = ratings.drop('Timestamp', axis = 1)
 users = pd.read_csv(users_data_filename, sep='::', engine = 'python', header=None)
 users.columns = ['UserID', 'Gender', 'Age', 'Occupation', 'Zip-code']
 
+# Compute each MovieLens user's average rating.
+# Use that to normalize ratings.
+
 user_avg_ratings = ratings.groupby('UserID')['Rating'].mean().reset_index()
 user_avg_ratings.columns = ['UserID', 'Avg_User_Rating']
 
@@ -86,6 +68,9 @@ movie_avg_ratings.columns = ['movie_id', 'Avg_Rating', 'Num_Ratings', 'Avg_Norma
 movies_with_ratings = pd.merge(detailed_movies, movie_avg_ratings, on='movie_id', how='left')
 movies_with_ratings.dropna(inplace=True)
 movies_with_ratings.sort_values(by='Avg_Normalized_Rating', ascending=False)
+
+# Compute weighted movie scores for Sytem I.
+# Assign 90% of score to the average normalized rating, 10% to the winsorized number of ratings.
 
 weight_normalized_rating = 0.9 
 weight_num_ratings = 1-weight_normalized_rating
