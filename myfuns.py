@@ -188,6 +188,7 @@ def top_alternate_movies(exclude_movie_ids, df=movies_with_ratings, num=10):
 #########################
 
 def get_displayed_movies():
+    #return movies_with_ratings[['movie_id', 'title', 'genres']].head(100)
     return movies.head(100)
 
 def get_popular_movies(genre: str):
@@ -203,7 +204,7 @@ def get_recommended_movies(user_rating_input, n_req_recommendations=10, min_rati
     Recommend exactly n_req_recommendations movies.
     
     Arguments:
-    * new_user_ratings: dictionary of movie IDs and the user's ratings.
+    * user_rating_input: dictionary of movie IDs and the user's ratings.
     * n_req_recommendations: the required number of recommendations to return.
     * min_rating_recommended: only recommend movies with this predicted rating and above.
     """
@@ -221,7 +222,16 @@ def get_recommended_movies(user_rating_input, n_req_recommendations=10, min_rati
     
     # IDs of rated movies in the reduced matrix.
     # Convert IDs to integer for compatibility with the "movies" dataframe.
-    rated_movie_ids = [int(movie_id[1:]) for movie_id in char_movie_ids[rated_index].tolist()]
+
+    # If only one rating
+    if (type(rated_index) is int):
+        rated_movie_ids = [int(char_movie_ids[rated_index][1:])]
+    # If list of ratings
+    elif (len(rated_index) > 1):
+        rated_movie_ids = [int(movie_id[1:]) for movie_id in char_movie_ids[rated_index].tolist()]
+    # If no ratings
+    else:
+        rated_movie_ids = []
     
     # Identify movies the new user hasn't rated yet.
     # Will use these to skip rating movies a user has already rated.
@@ -233,7 +243,7 @@ def get_recommended_movies(user_rating_input, n_req_recommendations=10, min_rati
     # Initialize the number of recommendations to return
     n_recommended = 0
 
-        # If user rated at least one movie, find similar movies to recommend
+    # If user rated at least one movie, find similar movies to recommend
     if (len(unrated_index) < similarity_matrix.shape[0]):
     
         # To make predictions, create reduced version of the culled similarity matrix.
@@ -289,7 +299,6 @@ def get_recommended_movies(user_rating_input, n_req_recommendations=10, min_rati
 
         if (n_recommended < n_req_recommendations):
             # Don't include existing ratings and recommendations in the list of additional movies.
-            
             additional_movies = top_alternate_movies(exclude_movie_ids=rated_movie_ids + recommended_movie_ids,
                                                         df=movies_with_ratings,
                                                         num=n_req_recommendations - n_recommended)
