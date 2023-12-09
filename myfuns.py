@@ -165,7 +165,7 @@ def construct_user_rating_array(user_rating_input):
 
     return user_rating_array
 
-def top_alternate_movies(exclude_movie_ids, df=movies_with_ratings, num=10):
+def top_alternate_movies(exclude_movie_ids, df=movies_with_ratings, metric="Score", num=10):
     """
     Recommend the top num high-scoring movies that are not in the given list.
     Use this to pad out similarity-based recommendations when there are too few.
@@ -173,11 +173,14 @@ def top_alternate_movies(exclude_movie_ids, df=movies_with_ratings, num=10):
     Arguments:
     * exclude_movie_ids: list of integer movie IDs that are already rated or recommended
     * df: dataframe of all movies, sorted by score
+    * metric: a combined measure of movie popularity + rating.
     * num: the number of movies to return
     """
     
+    # Sort movies by desirability
+    sorted_movies = df.sort_values(by=metric, ascending=False)
     # Exclude movies that are in the exclusion list
-    sorted_movies = df[~df['movie_id'].isin(exclude_movie_ids)]
+    sorted_movies = sorted_movies[~sorted_movies['movie_id'].isin(exclude_movie_ids)]
     # Take the top num movies
     top_num_movies = sorted_movies.head(num)[['movie_id', 'title']]
 
