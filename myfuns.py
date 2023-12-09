@@ -100,7 +100,7 @@ movies_with_ratings['Score'] = (
 
 movies_with_ratings.drop('Capped_Num_Ratings', axis=1, inplace=True)
 
-movies_with_ratings.sort_values(by='Score', ascending=False)
+movies_with_ratings.sort_values(by='Score', ascending=False, inplace=True)
 
 #################################
 # Movie/movie similarity matrix #
@@ -177,10 +177,8 @@ def top_alternate_movies(exclude_movie_ids, df=movies_with_ratings, metric="Scor
     * num: the number of movies to return
     """
     
-    # Sort movies by desirability
-    sorted_movies = df.sort_values(by=metric, ascending=False)
     # Exclude movies that are in the exclusion list
-    sorted_movies = sorted_movies[~sorted_movies['movie_id'].isin(exclude_movie_ids)]
+    sorted_movies = df[~df['movie_id'].isin(exclude_movie_ids)]
     # Take the top num movies
     top_num_movies = sorted_movies.head(num)[['movie_id', 'title']]
 
@@ -191,8 +189,8 @@ def top_alternate_movies(exclude_movie_ids, df=movies_with_ratings, metric="Scor
 #########################
 
 def get_displayed_movies():
-    #return movies_with_ratings[['movie_id', 'title', 'genres']].head(100)
-    return movies.head(100)
+    return movies_with_ratings[['movie_id', 'title', 'genres']].head(100)
+    #return movies.head(100)
 
 def get_popular_movies(genre: str):
     if genre in genres:
