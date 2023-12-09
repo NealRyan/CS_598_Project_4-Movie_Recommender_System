@@ -176,6 +176,7 @@ def get_movie_card(movie, with_rating=False):
                         id={"type": "movie_rating", "movie_id": movie.movie_id},
                         inputClassName="m-1",
                         labelClassName="px-1",
+                        inline=True
                     )
                 ]
                 if with_rating

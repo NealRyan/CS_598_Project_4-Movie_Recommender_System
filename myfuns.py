@@ -158,10 +158,10 @@ def construct_user_rating_array(user_rating_input):
     user_rating_array = np.full((char_movie_ids.shape[0]), np.NAN)
 
     # Loop over user ratings. Set an individual array element for each rating.
-    for movie_id, rating in user_rating_input:
+    for movie_id, rating in user_rating_input.items():
         char_movie_id = "m" + str(movie_id)
         char_movie_index = np.where(char_movie_ids == char_movie_id)[0][0]
-        char_movie_ids[char_movie_index] = rating
+        user_rating_array[char_movie_index] = rating
 
     return user_rating_array
 
@@ -280,13 +280,14 @@ def get_recommended_movies(user_rating_input, n_req_recommendations=10, min_rati
         recommended_movie_ids = unrated_movie_ids[pred_rating_sort_index]
         # Convert recommended movie IDs to integers for compatibility with the "movies" dataframe
         recommended_movie_ids = [int(movie_id[1:]) for movie_id in recommended_movie_ids.tolist()]
+        recommended_movie_id_df = pd.DataFrame({"movie_id": recommended_movie_ids})
 
         # Get dataframe of recommendations
-        recommended_movies = pd.merge(recommended_movie_ids, movies, on="movie_id")
+        recommended_movies = pd.merge(recommended_movie_id_df, movies, on="movie_id")
         
         # If not enough recommendations, fill in the rest based on System I logic.
 
-       if (n_recommended < n_req_recommendations):
+        if (n_recommended < n_req_recommendations):
             # Don't include existing ratings and recommendations in the list of additional movies.
             
             additional_movies = top_alternate_movies(exclude_movie_ids=rated_movie_ids + recommended_movie_ids,
