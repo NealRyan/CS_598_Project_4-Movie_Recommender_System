@@ -1,5 +1,9 @@
 # CS_598_Project_4-Movie_Recommender_System
 
+## Live version
+
+A live version of the app can be found here: https://kna-movie-recommender.onrender.com/ 
+
 # How are general recommendations handled? (Non-IBCF)
 
 We will recommend movies with the highest score.
