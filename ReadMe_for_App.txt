@@ -9,7 +9,7 @@ Team Members:
 To run app locally:
 
 1) From command prompt, run:
-	python Dash_Starter_Code.py
+	python Dash_App.py
 	
 2) Point web browser to: http://127.0.0.1:8080/
 
