@@ -11,7 +11,7 @@
 # To run app locally:
 #
 # 1) From command prompt, run:
-#    python Dash_Starter_Code.py
+#    python Dash_App.py
 #
 # 2) Point web browser to: http://127.0.0.1:8080/
 
@@ -29,7 +29,7 @@ movies_data_filename = "Data/movies.dat"
 ratings_data_filename = "Data/ratings.dat"
 users_data_filename = "Data/users.dat"
 
-#Movies
+#Generate Movies dataframe
 movies = pd.read_csv(movies_data_filename, sep='::', engine = 'python',
                     encoding="ISO-8859-1", header = None)
 movies.columns = ['movie_id', 'title', 'genres']
@@ -42,12 +42,12 @@ genres = list(
 )
 
 
-#Ratings
+#Ratings dataframe
 ratings = pd.read_csv(ratings_data_filename, sep='::', engine = 'python', header=None)
 ratings.columns = ['UserID', 'movie_id', 'Rating', 'Timestamp']
 ratings = ratings.drop('Timestamp', axis = 1)
 
-#Users
+#Users dataframe
 users = pd.read_csv(users_data_filename, sep='::', engine = 'python', header=None)
 users.columns = ['UserID', 'Gender', 'Age', 'Occupation', 'Zip-code']
 
@@ -105,10 +105,18 @@ char_movie_ids = similarity_df.columns
 ####################
 
 def pad_recommendations(current_recommendations_df, num=10, genre='any', metric='Score'):
-    #Pad any recommendation dataframe up to the specified number with the best 
-    #movies from the genre (if specified, best in general if not)
-    #Useful for sparse recommendations
+    """
+    Pad any recommendation dataframe up to the specified number with the best 
+    movies from the genre specified (or best in general if not)
+    Useful for sparse recommendations
 
+    Arguments:
+    * current_recommendations_df: since were padding only, this is the recommendations
+    dataframe sent it which will be checked to ensure no overlap
+    * num: the number of movies to return
+    * genre: genre to select movies from, "any" by default for all genres
+    * metric: a combined measure of movie popularity + rating.
+    """
     num_to_pad = num - len(current_recommendations_df)
     if num_to_pad==0:
         return current_recommendations_df
@@ -125,7 +133,15 @@ def pad_recommendations(current_recommendations_df, num=10, genre='any', metric=
     return top_genre_movies
 
 def top_movies_by_genre(genre, df, metric='Score', num=10):
-    #Recommend the top num scoring movies from the genre specified
+    """
+    Recommend the top num high-scoring movies that are in specified genre.
+    
+    Arguments:
+    * genre: genre to select movies from
+    * df: dataframe of all movies, sorted by score
+    * metric: a combined measure of movie popularity + rating.
+    * num: the number of movies to return
+    """
     
     genre_filter = df[genre] == 1
     genre_movies = df[genre_filter]

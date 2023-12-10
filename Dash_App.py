@@ -1,9 +1,5 @@
-from logging import debug
-from typing import Dict
-
 import dash
 import dash_bootstrap_components as dbc
-import pandas as pd
 from dash import Input, Output, dcc, html
 from dash.dependencies import ALL, State
 
