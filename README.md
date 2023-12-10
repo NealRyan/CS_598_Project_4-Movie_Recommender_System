@@ -26,7 +26,7 @@ This metric will be referred to as "score."
 
 - Also not worth super curating, as we could take a “one man’s trash is another mans treasure” approach 
 
-- Ultimately, eliminate from consideration movies whose normalized rating is below 3.0, as this is universally seen as a below average movie
+- Ultimately, eliminate from consideration movies whose predicted rating is below 3.0, as this is universally seen as a below average movie
 
 ### No similar movies (or all under rating threshold) 
 
