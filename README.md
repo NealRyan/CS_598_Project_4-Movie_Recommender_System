@@ -16,17 +16,17 @@ This metric will be referred to as "score."
 
 ### User does not provide enough/any ratings to system 2 
 
-- If 0 movies are rated: pad the list with the highest score movies (general, not from a particular genre) 
+- If 0 movies are rated: pad the list with the highest score movies (general, not from a particular genre) (Not needed as app doesn't take 0 input)
 
 - If >0 but <10 movies are rated: use IBCF to recommend as many movies as possible, then pad this list with highest score movies 
 
 ### Movies provided by system 2 are low rated 
 
-- Probably unlikely if we only allow ratings of the top 100 movies (similar movies should also be well rated) 
+- Generally non-issue, as more popular movies will naturally bubble to the top
 
-- Potential nonissue if we take the “one man’s trash is another mans treasure” approach 
+- Also not worth super curating, as we could take a “one man’s trash is another mans treasure” approach 
 
-- Alternatively, we could set a rating cutoff of what we’re willing to recommend 
+- Ultimately, cull recommending movies whose normalized rating is below 3.0, as this is universally seen as a below average movie
 
 ### No similar movies (or under some threshold of similarity) 
 
