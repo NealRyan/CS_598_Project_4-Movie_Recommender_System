@@ -28,6 +28,6 @@ This metric will be referred to as "score."
 
 - Ultimately, eliminate from consideration movies whose normalized rating is below 3.0, as this is universally seen as a below average movie
 
-### No similar movies (or under some threshold of similarity) 
+### No similar movies (or all under rating threshold) 
 
 - Default to popular movies (defined by score) 
